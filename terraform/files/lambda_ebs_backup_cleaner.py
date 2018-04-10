@@ -4,6 +4,7 @@ This function looks at *all* snapshots that have a "DeleteOn" tag containing
 the current day formatted as YYYY-MM-DD. This function should be run at least
 daily.
 """
+#pylint: disable=F0401
 import re
 import datetime
 import boto3

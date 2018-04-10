@@ -1,5 +1,6 @@
 
 """Searches for instances with autosnapshot tag and snapshots the EBS volumes that are attached."""
+#pylint: disable=F0401
 import collections
 import datetime
 import boto3
