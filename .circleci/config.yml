@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run:
           name: install pylint
-          command: pip install -r pylint
+          command: pip install pylint
       - run:
           name: pylint - linting on backup function
           command: cd terraform/files && pylint lambda_ebs_backup.py
