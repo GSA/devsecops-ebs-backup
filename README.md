@@ -1,4 +1,4 @@
-# devsecops-ebs-backup
+# devsecops-ebs-backup [![CircleCI](https://circleci.com/gh/GSA/devsecops-ebs-backup.svg?style=svg)](https://circleci.com/gh/GSA/devsecops-ebs-backup)
 
 This is a quick implementation of an EBS backup solution with Terraform and Lambda.
 
