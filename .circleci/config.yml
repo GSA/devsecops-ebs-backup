@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  terraform:
+    docker:
+      - image: hashicorp/terraform
+        environment:
+          AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - checkout
+      - run:
+          name: devsecops-ebs-backup - Set up Terraform
+          command: cd terraform/test && terraform init -backend=false
+      - run:
+          name: devsecops-ebs-backup - Validate Terraform
+          command: cd terraform/test && terraform validate -check-variables=false
+  pylint:
+    docker:
+      - image: circleci/python:3.6.4
+    steps:
+      - checkout
+      - run:
+          name: install pylint
+          command: sudo pip install pylint
+      - run:
+          name: pylint - linting on backup function
+          command: cd terraform/files && pylint lambda_ebs_backup.py
+      - run:
+          name: pylint - linting on backup cleaner function
+          command: cd terraform/files && pylint lambda_ebs_backup_cleaner.py
+
+workflows:
+  version: 2
+
+  validate:
+    jobs:
+      - terraform
+      - pylint
