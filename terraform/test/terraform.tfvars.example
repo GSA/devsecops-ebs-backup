@@ -1,0 +1,15 @@
+variable "lambda_iam_role_name" {
+    default = "EBS Backup Lambda Role"
+}
+variable "lambda_ebs_backup_function_name" {
+    default "Lambda EBS Backup Function"
+}
+variable "lambda_ebs_retention_function_name" {
+    default "Lambda EBS Retention Function"
+}
+variable "snapshot_retention_days" {
+    default = "7"
+}
+variable "snapshot_tag" {
+    default = "Autosnapshot"
+}
