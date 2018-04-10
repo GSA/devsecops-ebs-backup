@@ -1,11 +1,15 @@
-import boto3
+
+"""Searches for instances with autosnapshot tag and snapshots the EBS volumes that are attached."""
 import collections
 import datetime
+import boto3
 
-ec = boto3.client('ec2')
+EC = boto3.client('ec2')
 
 def lambda_handler(event, context):
-    reservations = ec.describe_instances(
+    # pylint: disable=W0612,W0613
+    """Default Lambda handler function"""
+    reservations = EC.describe_instances(
         Filters=[
             {'Name': 'tag-key', 'Values': ['Autosnapshot', 'autosnapshot']},
         ]
@@ -37,7 +41,7 @@ def lambda_handler(event, context):
             print("Found EBS volume %s on instance %s" % (
                 vol_id, instance['InstanceId']))
 
-            snap = ec.create_snapshot(
+            snap = EC.create_snapshot(
                 VolumeId=vol_id,
             )
 
@@ -55,7 +59,7 @@ def lambda_handler(event, context):
         delete_date = datetime.date.today() + datetime.timedelta(days=retention_days)
         delete_fmt = delete_date.strftime('%Y-%m-%d')
         print("Will delete %d snapshots on %s" % (len(to_tag[retention_days]), delete_fmt))
-        ec.create_tags(
+        EC.create_tags(
             Resources=to_tag[retention_days],
             Tags=[
                 {'Key': 'DeleteOn', 'Value': delete_fmt},
