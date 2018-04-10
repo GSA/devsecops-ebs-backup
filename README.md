@@ -36,3 +36,7 @@ Use these steps to deploy the test.
     ````sh
     terraform apply
     ````
+
+## Attribution
+
+The lambda function code used in this terraform module is adapted from [this link](https://serverlesscode.com/post/lambda-schedule-ebs-snapshot-backups-2/)
