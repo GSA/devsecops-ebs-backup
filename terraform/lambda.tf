@@ -1,3 +1,15 @@
+data "archive_file" "lambda_ebs_backup_file" {
+  type        = "zip"
+  source_file = "${path.module}/files/lambda_ebs_backup.py"
+  output_path = "${path.module}/files/lambda_ebs_backup.py.zip"
+}
+
+data "archive_file" "lambda_ebs_backup_cleaner_file" {
+  type        = "zip"
+  source_file = "${path.module}/files/lambda_ebs_backup_cleaner.py"
+  output_path = "${path.module}/files/lambda_ebs_backup_cleaner.py.zip"
+}
+
 # Define Lambda functions
 resource "aws_lambda_function" "lambda_ebs_backup_function" {
   filename      = "${path.module}/files/lambda_ebs_backup.py.zip"
@@ -5,6 +17,12 @@ resource "aws_lambda_function" "lambda_ebs_backup_function" {
   role          = "${aws_iam_role.lambda_backup_role.arn}"
   handler       = "lambda_ebs_backup.lambda_handler"
   runtime       = "python3.6"
+
+  environment {
+    variables = {
+      SNAPSHOT_RETENTION_DAYS = "${var.snapshot_retention_days}"
+    }
+  }
 }
 
 resource "aws_lambda_function" "lambda_ebs_backup_cleaner" {

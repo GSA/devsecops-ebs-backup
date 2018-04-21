@@ -15,7 +15,7 @@ variable "lambda_ebs_cleaner_function_name" {
 }
 
 variable "snapshot_retention_days" {
-  default = "7"
+  default = "14"
 }
 
 variable "snapshot_tag" {

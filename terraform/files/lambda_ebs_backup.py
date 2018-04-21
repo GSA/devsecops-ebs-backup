@@ -1,6 +1,7 @@
 
 """Searches for instances with autosnapshot tag and snapshots the EBS volumes that are attached."""
 #pylint: disable=F0401
+import os
 import collections
 import datetime
 import boto3
@@ -33,7 +34,7 @@ def lambda_handler(event, context):
                 int(t.get('Value')) for t in instance['Tags']
                 if t['Key'] == 'Retention'][0]
         except IndexError:
-            retention_days = 14
+            retention_days = os.environ['SNAPSHOT_RETENTION_DAYS']
 
         for dev in instance['BlockDeviceMappings']:
             if dev.get('Ebs', None) is None:

@@ -9,3 +9,6 @@
 # Module directories
 .terraform/
 modules/
+# Ignore specific zip files
+lambda_ebs_backup.py.zip
+lambda_ebs_backup_cleaner.py.zip
