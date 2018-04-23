@@ -34,14 +34,14 @@ resource "aws_lambda_function" "lambda_ebs_backup_cleaner" {
 }
 
 # Cloudwatch event rule/target/etc. for the lambda backup function
-resource "aws_cloudwatch_event_rule" "ebs_snapshot_daily" {
-  name                = "run-at-320"
-  description         = "Runs daily at 3:20am"
-  schedule_expression = "cron(3 20 * * ? *)"
+resource "aws_cloudwatch_event_rule" "ebs_snapshot_event" {
+  name                = "${var.ebs_snapshot_event_name}"
+  description         = "${var.ebs_snapshot_event_description}"
+  schedule_expression = "${var.ebs_snapshot_event_schedule}"
 }
 
-resource "aws_cloudwatch_event_target" "lambda_ebs_backup_function_daily" {
-  rule      = "${aws_cloudwatch_event_rule.ebs_snapshot_daily.name}"
+resource "aws_cloudwatch_event_target" "lambda_ebs_backup_function_event" {
+  rule      = "${aws_cloudwatch_event_rule.ebs_snapshot_event.name}"
   target_id = "lambda_ebs_backup_function"
   arn       = "${aws_lambda_function.lambda_ebs_backup_function.arn}"
 }
@@ -51,18 +51,18 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda_ebs_backup_fun
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.lambda_ebs_backup_function.function_name}"
   principal     = "events.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_event_rule.ebs_snapshot_daily.arn}"
+  source_arn    = "${aws_cloudwatch_event_rule.ebs_snapshot_event.arn}"
 }
 
 # Cloudwatch event rule/target/etc. for the lambda cleaner function
-resource "aws_cloudwatch_event_rule" "ebs_snapshot_cleanup_daily" {
-  name                = "run-at-420"
-  description         = "Runs daily at 4:20am"
-  schedule_expression = "cron(4 20 * * ? *)"
+resource "aws_cloudwatch_event_rule" "ebs_snapshot_cleanup_event" {
+  name                = "${var.ebs_snapshot_cleanup_event_name}"
+  description         = "${var.ebs_snapshot_cleanup_event_description}"
+  schedule_expression = "${var.ebs_snapshot_cleanup_event_schedule}"
 }
 
-resource "aws_cloudwatch_event_target" "lambda_ebs_backup_cleaner_daily" {
-  rule      = "${aws_cloudwatch_event_rule.ebs_snapshot_cleanup_daily.name}"
+resource "aws_cloudwatch_event_target" "lambda_ebs_backup_cleaner_event" {
+  rule      = "${aws_cloudwatch_event_rule.ebs_snapshot_cleanup_event.name}"
   target_id = "lambda_ebs_backup_cleaner"
   arn       = "${aws_lambda_function.lambda_ebs_backup_cleaner.arn}"
 }
@@ -72,5 +72,5 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda_ebs_backup_cle
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.lambda_ebs_backup_cleaner.function_name}"
   principal     = "events.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_event_rule.ebs_snapshot_cleanup_daily.arn}"
+  source_arn    = "${aws_cloudwatch_event_rule.ebs_snapshot_cleanup_event.arn}"
 }

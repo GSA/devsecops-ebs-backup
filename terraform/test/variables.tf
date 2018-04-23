@@ -25,3 +25,27 @@ variable "snapshot_retention_days" {
 variable "snapshot_tag" {
   default = "Autosnapshot"
 }
+
+variable "ebs_snapshot_event_name" {
+  default = "run-at-320"
+}
+
+variable "ebs_snapshot_event_description" {
+  default = "Runs daily at 3:20am"
+}
+
+variable "ebs_snapshot_event_schedule" {
+  default = "cron(3 20 * * ? *)"
+}
+
+variable "ebs_snapshot_cleanup_event_name" {
+  default = "run-at-420"
+}
+
+variable "ebs_snapshot_cleanup_event_description" {
+  default = "Runs daily at 4:20am"
+}
+
+variable "ebs_snapshot_cleanup_event_schedule" {
+  default = "cron(4 20 * * ? *)"
+}
