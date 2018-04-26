@@ -7,7 +7,7 @@
 *.tfstate*
 #
 # Module directories
-.terraform/
+.terraform*/
 modules/
 # Ignore specific zip files
 lambda_ebs_backup.py.zip
