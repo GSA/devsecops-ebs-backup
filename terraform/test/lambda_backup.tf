@@ -6,4 +6,5 @@ module "lambda_backup" {
   lambda_ebs_cleaner_function_name           = "${var.lambda_ebs_cleaner_function_name}"
   snapshot_retention_days                    = "${var.snapshot_retention_days}"
   snapshot_tag                               = "${var.snapshot_tag}"
+  ebs_backup_sns_topic_name                  = "${var.ebs_backup_sns_topic_name}"
 }
