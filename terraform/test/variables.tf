@@ -35,7 +35,7 @@ variable "ebs_snapshot_event_description" {
 }
 
 variable "ebs_snapshot_event_schedule" {
-  default = "cron(3 20 * * ? *)"
+  default = "cron(20 8 * * ? *)"
 }
 
 variable "ebs_snapshot_cleanup_event_name" {
@@ -47,5 +47,5 @@ variable "ebs_snapshot_cleanup_event_description" {
 }
 
 variable "ebs_snapshot_cleanup_event_schedule" {
-  default = "cron(4 20 * * ? *)"
+  default = "cron(20 9 * * ? *)"
 }
