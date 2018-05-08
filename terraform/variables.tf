@@ -1,3 +1,7 @@
+variable "environment" {
+  type = "string"
+}
+
 variable "lambda_iam_role_name" {
   default = "ebs-backup-lambda-role"
 }
@@ -51,5 +55,5 @@ variable "ebs_backup_sns_topic_name" {
 }
 
 variable "ebs_backup_sns_subscription_address" {
-  default = "jasong.miller@gsa.gov"
+  type = "string"
 }

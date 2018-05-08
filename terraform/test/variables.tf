@@ -1,3 +1,7 @@
+variable "environment" {
+  type = "string"
+}
+
 variable "region" {
   default = "us-east-1"
 }
@@ -55,5 +59,5 @@ variable "ebs_backup_sns_topic_name" {
 }
 
 variable "ebs_backup_sns_subscription_address" {
-  default = "jasong.miller@gsa.gov"
+  type = "string"
 }

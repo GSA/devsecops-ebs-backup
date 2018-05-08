@@ -22,6 +22,7 @@ resource "aws_lambda_function" "lambda_ebs_backup_function" {
     variables = {
       SNAPSHOT_RETENTION_DAYS = "${var.snapshot_retention_days}"
       SNS_LOG_ARN             = "${aws_sns_topic.ebs_backup_sns.arn}"
+      ENVIRONMENT             = "${var.environment}"
     }
   }
 }
@@ -36,6 +37,7 @@ resource "aws_lambda_function" "lambda_ebs_backup_cleaner" {
   environment {
     variables = {
       SNS_LOG_ARN = "${aws_sns_topic.ebs_backup_sns.arn}"
+      ENVIRONMENT = "${var.environment}"
     }
   }
 }
