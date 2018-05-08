@@ -1,15 +1,19 @@
-variable "lambda_iam_role_name" {
-    default = "EBS Backup Lambda Role"
-}
-variable "lambda_ebs_backup_function_name" {
-    default "Lambda EBS Backup Function"
-}
-variable "lambda_ebs_retention_function_name" {
-    default "Lambda EBS Retention Function"
-}
-variable "snapshot_retention_days" {
-    default = "7"
-}
-variable "snapshot_tag" {
-    default = "Autosnapshot"
-}
+# Required variables
+environment = "<environment-name>"
+ebs_backup_sns_subscription_addresses = ["list", "of", "email", "addresses"]
+
+# Optionals that can be adjusted for your needs.
+# region = "us-east-1"
+# lambda_iam_role_name = "ebs-backup-lambda-role"
+# lambda_backup_role_permissions_policy_name = "lambda_ebs_backup_permissions"
+# lambda_ebs_backup_function_name = "lambda_ebs_backup_function"
+# lambda_ebs_cleaner_function_name = "lambda_ebs_retention_function"
+# snapshot_retention_days = "14"
+# snapshot_tag = "Autosnapshot"
+# ebs_snapshot_event_name = "run-at-320"
+# ebs_snapshot_event_description = "Runs daily at 3:20am"
+# ebs_snapshot_event_schedule = "cron(20 8 * * ? *)"
+# ebs_snapshot_cleanup_event_name = "run-at-420"
+# ebs_snapshot_cleanup_event_description = "Runs daily at 4:20am"
+# ebs_snapshot_cleanup_event_schedule = "cron(20 9 * * ? *)"
+# ebs_backup_sns_topic_name = "ebs-backup-topic"

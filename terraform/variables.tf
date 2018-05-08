@@ -1,3 +1,7 @@
+variable "environment" {
+  type = "string"
+}
+
 variable "lambda_iam_role_name" {
   default = "ebs-backup-lambda-role"
 }
@@ -44,4 +48,12 @@ variable "ebs_snapshot_cleanup_event_description" {
 
 variable "ebs_snapshot_cleanup_event_schedule" {
   default = "cron(20 9 * * ? *)"
+}
+
+variable "ebs_backup_sns_topic_name" {
+  default = "ebs-backup-topic"
+}
+
+variable "ebs_backup_sns_subscription_addresses" {
+  type = "list"
 }
