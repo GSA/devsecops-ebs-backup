@@ -47,6 +47,16 @@ resource "aws_iam_policy" "lambda_backup_role_permissions" {
         "ec2:DeleteSnapshot"
       ],
       "Resource": ["*"]
+    },
+    {
+      "Action" : [
+        "sns:Publish",
+        "sns:Subscribe"
+      ],
+      "Effect" : "Allow",
+      "Resource" : [
+          "${aws_sns_topic.ebs_backup_sns.arn}"
+      ]
     }
   ]
 }
