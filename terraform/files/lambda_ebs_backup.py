@@ -14,7 +14,8 @@ BUF = StringIO()
 def lambda_handler(event, context):
     # pylint: disable=W0612,W0613
     """Default Lambda handler function"""
-    logthis("Executing Lambda backup script for environment: " + os.environ['ENVIRONMENT'] + "\n")
+    logthis("Executing Lambda backup script for environment: " + os.environ['ENVIRONMENT']
+            + "\n")
     reservations = EC.describe_instances(
         Filters=[
             {'Name': 'tag-key', 'Values': ['Autosnapshot', 'autosnapshot']},
