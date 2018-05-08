@@ -19,8 +19,7 @@ BUF = StringIO()
 def lambda_handler(event, context):
     # pylint: disable=W0612,W0613,W0703
     """Default Lambda Handler function"""
-    logthis("Executing Lambda backup cleaner script for environment: " +
-              os.environ['ENVIRONMENT'] + "\n")
+    logthis("Executing Lambda backup cleaner script for environment: " + os.environ['ENVIRONMENT'] + "\n")
     account_ids = list()
     try:
         account_ids.append(IAM.get_user()['User']['Arn'].split(':')[4])
