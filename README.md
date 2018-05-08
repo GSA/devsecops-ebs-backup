@@ -9,6 +9,7 @@ It can be executed out of the box by installing Terraform and running the deploy
 Use these steps to deploy the test.
 
 1. Create an S3 bucket for the terraform state.
+1. Make sure you're using the latest [Terraform](http://terraform.io). This was tested with Terraform 0.11.7.
 1. Run the following command:
 
     ````sh
@@ -18,7 +19,7 @@ Use these steps to deploy the test.
     ````
 
 1. Fill out backend.tfvars with the name of the S3 bucket you just created.
-1. Fill out terraform.tfvars with required values. At a minimum, required variables for this repo are "environment" and "ebs_backup_sns_subscription_address". Both are type "string."
+1. Fill out terraform.tfvars with required values. At a minimum, required variables for this repo are "environment" and "ebs_backup_sns_subscription_addresses". "Environment" is type "string" and "ebs_backup_sns_subscription_addresses" is a terraform list variable.
 1. Run the init:
 
     ````sh
@@ -37,7 +38,7 @@ Use these steps to deploy the test.
     terraform apply
     ````
 
-The address that was configured in the variable "ebs_backup_sns_subscription_address" will be asked to confirm the SNS subscription in email. You MUST confirm with the link in the email to receive notifications from the Lambda scripts.
+The address that was configured in the variable "ebs_backup_sns_subscription_addresses" will be asked to confirm the SNS subscription in email. You MUST confirm with the link in the email to receive notifications from the Lambda scripts.
 
 ## Attribution
 

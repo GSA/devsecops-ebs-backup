@@ -54,6 +54,6 @@ variable "ebs_backup_sns_topic_name" {
   default = "ebs-backup-topic"
 }
 
-variable "ebs_backup_sns_subscription_address" {
-  type = "string"
+variable "ebs_backup_sns_subscription_addresses" {
+  type = "list"
 }
