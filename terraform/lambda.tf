@@ -21,6 +21,7 @@ resource "aws_lambda_function" "lambda_ebs_backup_function" {
   environment {
     variables = {
       SNAPSHOT_RETENTION_DAYS = "${var.snapshot_retention_days}"
+      SNS_LOG_ARN             = "${aws_sns_topic.ebs_backup_sns.arn}"
     }
   }
 }
@@ -31,6 +32,12 @@ resource "aws_lambda_function" "lambda_ebs_backup_cleaner" {
   role          = "${aws_iam_role.lambda_backup_role.arn}"
   handler       = "lambda_ebs_backup_cleaner.lambda_handler"
   runtime       = "python3.6"
+
+  environment {
+    variables = {
+      SNS_LOG_ARN = "${aws_sns_topic.ebs_backup_sns.arn}"
+    }
+  }
 }
 
 # Cloudwatch event rule/target/etc. for the lambda backup function

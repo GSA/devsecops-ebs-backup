@@ -5,12 +5,16 @@ the current day formatted as YYYY-MM-DD. This function should be run at least
 daily.
 """
 #pylint: disable=F0401
+import os
 import re
 import datetime
 import boto3
+from io import StringIO
 
 EC = boto3.client('ec2')
 IAM = boto3.client('iam')
+SNS = boto3.client('sns')
+buf = StringIO()
 
 def lambda_handler(event, context):
     # pylint: disable=W0612,W0613,W0703
@@ -32,5 +36,23 @@ def lambda_handler(event, context):
         OwnerIds=account_ids, Filters=filters)
 
     for snap in snapshot_response['Snapshots']:
-        print("Deleting snapshot %s" % snap['SnapshotId'])
+        logthis("Deleting snapshot %s" % snap['SnapshotId'])
         EC.delete_snapshot(SnapshotId=snap['SnapshotId'])
+    else:
+        logthis("No snapshots to delete on this run.")
+
+    sendsns()
+    buf.close()
+    
+
+def logthis(loginfo):
+    print(loginfo)
+    buf.write(loginfo)
+    buf.write("\n")
+
+
+def sendsns():
+    SNS.publish(
+        TargetArn=os.environ['SNS_LOG_ARN'],
+        Message=str(buf.getvalue())
+    )

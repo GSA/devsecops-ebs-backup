@@ -5,8 +5,12 @@ import os
 import collections
 import datetime
 import boto3
+from io import StringIO
 
 EC = boto3.client('ec2')
+SNS = boto3.client('sns')
+buf = StringIO()
+
 
 def lambda_handler(event, context):
     # pylint: disable=W0612,W0613
@@ -24,7 +28,7 @@ def lambda_handler(event, context):
         for i in r['Instances']
     ]
 
-    print("Found %d instances that need backing up" % len(instances))
+    logthis("Found %d instances that need backing up" % len(instances))
 
     to_tag = collections.defaultdict(list)
 
@@ -40,7 +44,8 @@ def lambda_handler(event, context):
             if dev.get('Ebs', None) is None:
                 continue
             vol_id = dev['Ebs']['VolumeId']
-            print("Found EBS volume %s on instance %s" % (
+
+            logthis("Found EBS volume %s on instance %s" % (
                 vol_id, instance['InstanceId']))
 
             snap = EC.create_snapshot(
@@ -49,21 +54,37 @@ def lambda_handler(event, context):
 
             to_tag[retention_days].append(snap['SnapshotId'])
 
-            print("Retaining snapshot %s of volume %s from instance %s for %d days" % (
+            logthis("Retaining snapshot %s of volume %s from instance %s for %d days" % (
                 snap['SnapshotId'],
                 vol_id,
                 instance['InstanceId'],
                 retention_days,
             ))
 
-
     for retention_days in to_tag.keys():
         delete_date = datetime.date.today() + datetime.timedelta(days=retention_days)
         delete_fmt = delete_date.strftime('%Y-%m-%d')
-        print("Will delete %d snapshots on %s" % (len(to_tag[retention_days]), delete_fmt))
+        logthis("Will delete %d snapshots on %s" %
+                (len(to_tag[retention_days]), delete_fmt))
         EC.create_tags(
             Resources=to_tag[retention_days],
             Tags=[
                 {'Key': 'DeleteOn', 'Value': delete_fmt},
             ]
         )
+
+    sendsns()
+    buf.close()
+
+
+def logthis(loginfo):
+    print(loginfo)
+    buf.write(loginfo)
+    buf.write("\n")
+
+
+def sendsns():
+    SNS.publish(
+        TargetArn=os.environ['SNS_LOG_ARN'],
+        Message=str(buf.getvalue())
+    )
