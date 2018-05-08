@@ -38,19 +38,18 @@ def lambda_handler(event, context):
     for snap in snapshot_response['Snapshots']:
         logthis("Deleting snapshot %s" % snap['SnapshotId'])
         EC.delete_snapshot(SnapshotId=snap['SnapshotId'])
+        break
     else:
         logthis("No snapshots to delete on this run.")
 
     sendsns()
     BUF.close()
-    
 
 def logthis(loginfo):
     """Just writes to a log buffer so we can output it to SNS later. Also sends to lambda logs."""
     print(loginfo)
     BUF.write(loginfo)
     BUF.write("\n")
-
 
 def sendsns():
     """Transmits the SNS"""

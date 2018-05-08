@@ -11,7 +11,6 @@ EC = boto3.client('ec2')
 SNS = boto3.client('sns')
 BUF = StringIO()
 
-
 def lambda_handler(event, context):
     # pylint: disable=W0612,W0613
     """Default Lambda handler function"""
@@ -76,13 +75,11 @@ def lambda_handler(event, context):
     sendsns()
     BUF.close()
 
-
 def logthis(loginfo):
     """Just writes to a log buffer so we can output it to SNS later. Also sends to lambda logs."""
     print(loginfo)
     BUF.write(loginfo)
     BUF.write("\n")
-
 
 def sendsns():
     """Transmits the SNS"""
