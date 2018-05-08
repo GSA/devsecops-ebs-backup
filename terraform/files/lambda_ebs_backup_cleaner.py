@@ -8,13 +8,13 @@ daily.
 import os
 import re
 import datetime
-import boto3
 from io import StringIO
+import boto3
 
 EC = boto3.client('ec2')
 IAM = boto3.client('iam')
 SNS = boto3.client('sns')
-buf = StringIO()
+BUF = StringIO()
 
 def lambda_handler(event, context):
     # pylint: disable=W0612,W0613,W0703
@@ -42,17 +42,19 @@ def lambda_handler(event, context):
         logthis("No snapshots to delete on this run.")
 
     sendsns()
-    buf.close()
+    BUF.close()
     
 
 def logthis(loginfo):
+    """Just writes to a log buffer so we can output it to SNS later. Also sends to lambda logs."""
     print(loginfo)
-    buf.write(loginfo)
-    buf.write("\n")
+    BUF.write(loginfo)
+    BUF.write("\n")
 
 
 def sendsns():
+    """Transmits the SNS"""
     SNS.publish(
         TargetArn=os.environ['SNS_LOG_ARN'],
-        Message=str(buf.getvalue())
+        Message=str(BUF.getvalue())
     )

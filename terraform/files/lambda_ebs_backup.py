@@ -4,12 +4,12 @@
 import os
 import collections
 import datetime
-import boto3
 from io import StringIO
+import boto3
 
 EC = boto3.client('ec2')
 SNS = boto3.client('sns')
-buf = StringIO()
+BUF = StringIO()
 
 
 def lambda_handler(event, context):
@@ -74,17 +74,19 @@ def lambda_handler(event, context):
         )
 
     sendsns()
-    buf.close()
+    BUF.close()
 
 
 def logthis(loginfo):
+    """Just writes to a log buffer so we can output it to SNS later. Also sends to lambda logs."""
     print(loginfo)
-    buf.write(loginfo)
-    buf.write("\n")
+    BUF.write(loginfo)
+    BUF.write("\n")
 
 
 def sendsns():
+    """Transmits the SNS"""
     SNS.publish(
         TargetArn=os.environ['SNS_LOG_ARN'],
-        Message=str(buf.getvalue())
+        Message=str(BUF.getvalue())
     )
