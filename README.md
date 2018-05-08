@@ -18,7 +18,7 @@ Use these steps to deploy the test.
     ````
 
 1. Fill out backend.tfvars with the name of the S3 bucket you just created.
-1. Fill out terraform.tfvars with required values.
+1. Fill out terraform.tfvars with required values. At a minimum, required variables for this repo are "environment" and "ebs_backup_sns_subscription_address". Both are type "string."
 1. Run the init:
 
     ````sh
@@ -36,6 +36,8 @@ Use these steps to deploy the test.
     ````sh
     terraform apply
     ````
+
+The address that was configured in the variable "ebs_backup_sns_subscription_address" will be asked to confirm the SNS subscription in email. You MUST confirm with the link in the email to receive notifications from the Lambda scripts.
 
 ## Attribution
 
