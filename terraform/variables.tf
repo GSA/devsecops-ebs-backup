@@ -2,6 +2,10 @@ variable "environment" {
   type = "string"
 }
 
+variable "aws_profile" {
+  default = "default"
+}
+
 variable "lambda_iam_role_name" {
   default = "ebs-backup-lambda-role"
 }

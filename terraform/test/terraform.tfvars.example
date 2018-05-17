@@ -2,6 +2,11 @@
 environment = "<environment-name>"
 ebs_backup_sns_subscription_addresses = ["list", "of", "email", "addresses"]
 
+# sts role setup for _Terraform_ to run, not the lambda.
+# Omitting these will use the default aws credentials.
+aws_role_arn = "arn:aws:iam::123456789012:role/ROLE"
+aws_profile  = "profile-to-use"   ### for aws cli, should match aws_role_arn
+
 # Optionals that can be adjusted for your needs.
 # region = "us-east-1"
 # lambda_iam_role_name = "ebs-backup-lambda-role"

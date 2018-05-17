@@ -2,6 +2,14 @@ variable "environment" {
   type = "string"
 }
 
+variable "aws_role_arn" {
+  default = ""
+}
+
+variable "aws_profile" {
+  default = "default"
+}
+
 variable "region" {
   default = "us-east-1"
 }
