@@ -19,8 +19,10 @@ BUF = StringIO()
 def lambda_handler(event, context):
     # pylint: disable=W0612,W0613,W0703
     """Default Lambda Handler function"""
-    logthis("Executing Lambda backup cleaner script for environment: " + os.environ['ENVIRONMENT']
+    logthis("\nExecuting Lambda backup cleaner script for environment: " + os.environ['ENVIRONMENT']
             + "\n")
+    logthis("If there are no snapshots listed below, that means no snapshots were found beyond the"
+            +" retention period.\n")
     account_ids = list()
     try:
         account_ids.append(IAM.get_user()['User']['Arn'].split(':')[4])
@@ -40,9 +42,6 @@ def lambda_handler(event, context):
     for snap in snapshot_response['Snapshots']:
         logthis("Deleting snapshot %s" % snap['SnapshotId'])
         EC.delete_snapshot(SnapshotId=snap['SnapshotId'])
-        break
-    else:
-        logthis("No snapshots to delete on this run.")
 
     sendsns()
     BUF.close()
