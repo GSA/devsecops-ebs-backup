@@ -1,6 +1,7 @@
 module "lambda_backup" {
   source                                     = "../"
   environment                                = "${var.environment}"
+  aws_profile                                = "${var.aws_profile}"
   lambda_iam_role_name                       = "${var.lambda_iam_role_name}"
   lambda_backup_role_permissions_policy_name = "${var.lambda_backup_role_permissions_policy_name}"
   lambda_ebs_backup_function_name            = "${var.lambda_ebs_backup_function_name}"
