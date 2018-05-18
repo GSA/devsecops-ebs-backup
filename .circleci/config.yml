@@ -23,10 +23,12 @@ jobs:
           command: sudo pip install pylint
       - run:
           name: pylint - linting on backup function
-          command: cd terraform/files && pylint lambda_ebs_backup.py
+          command: >
+            cd terraform/files && pylint '--msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}' lambda_ebs_backup.py
       - run:
           name: pylint - linting on backup cleaner function
-          command: cd terraform/files && pylint lambda_ebs_backup_cleaner.py
+          command: >
+            cd terraform/files && pylint '--msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}' lambda_ebs_backup_cleaner.py
 
 workflows:
   version: 2
